@@ -19,3 +19,18 @@ dependencies {
 }
 
 kotlin.target.browser { }
+
+browserRun {
+    boolean open = false; // open browser
+    int port = 8080
+    devServer = devServer.copy(
+            devServer.inline,
+            devServer.lazy,
+            devServer.noInfo,
+            open,
+            devServer.overlay,
+            port,
+            devServer.proxy,
+            devServer.contentBase,
+    )
+}
