@@ -14,9 +14,9 @@ interface RStudentListState : RState {
 
 class RStudentList : RComponent<RStudentListProps, RStudentListState>() {
 
-    init {
+    override fun componentWillMount() {
         state.apply {
-            present = Array(3) { false }
+            present = Array(props.students.size){false}
         }
     }
 
