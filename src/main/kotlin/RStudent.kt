@@ -1,38 +1,29 @@
-import kotlinx.html.js.onClickFunction
-import react.*
-import react.dom.*
-
 import data.Student
+import kotlinx.html.js.onClickFunction
+import org.w3c.dom.events.Event
+import react.*
+import react.dom.span
+import react.functionalComponent
 
-interface RStudentsProps : RProps {
+interface RStudentProps : RProps {
     var student: Student
-}
-
-interface RStudentState : RState {
     var present: Boolean
+    var onClick: (Event)->Unit
 }
 
-class RStudent : RComponent<RStudentsProps, RStudentState>() {
-    init {
-        state.apply {
-            present = false
+val RFStudent =
+    functionalComponent<RStudentProps> {
+        span (
+            if(it.present) "present" else "absent"
+        ){
+            +"${it.student.firstname} ${it.student.surname}"
+            attrs.onClickFunction = it.onClick
         }
     }
-    override fun RBuilder.render() {
-        div(
-            if (state.present) "present" else "absent"
-        ) {
-            +"${props.student.firstname} ${props.student.surname}"
-            attrs.onClickFunction = {
-                setState{
-                    present = !present
-                }
-            }
-        }
-    }
-}
 
-fun RBuilder.rstudent(student: Student) =
-    child(RStudent::class) {
+fun RBuilder.rstudent(student: Student, present: Boolean, onClick: (Event)->Unit) =
+    child(RFStudent) {
         attrs.student = student
+        attrs.present = present
+        attrs.onClick = onClick
     }

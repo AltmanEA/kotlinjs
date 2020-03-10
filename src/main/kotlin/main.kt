@@ -11,12 +11,6 @@ fun main() {
         h1 {
             +"Students"
         }
-        ol {
-            studentList.forEach {
-                li {
-                    rstudent(it)
-                }
-            }
-        }
+        studentList(studentList.toTypedArray())
     }
 }
