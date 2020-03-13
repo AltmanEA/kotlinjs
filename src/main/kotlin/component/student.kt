@@ -1,18 +1,19 @@
-import data.Student
+package component
+
+import react.*
+import react.dom.*
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
-import react.*
-import react.dom.span
-import react.functionalComponent
+import data.*
 
-interface RStudentProps : RProps {
+interface StudentProps : RProps {
     var student: Student
     var present: Boolean
     var onClick: (Event)->Unit
 }
 
-val RFStudent =
-    functionalComponent<RStudentProps> {
+val fStudent =
+    functionalComponent<StudentProps> {
         span (
             if(it.present) "present" else "absent"
         ){
@@ -21,8 +22,11 @@ val RFStudent =
         }
     }
 
-fun RBuilder.rstudent(student: Student, present: Boolean, onClick: (Event)->Unit) =
-    child(RFStudent) {
+fun RBuilder.student(
+    student: Student,
+    present: Boolean,
+    onClick: (Event)->Unit
+) = child(fStudent) {
         attrs.student = student
         attrs.present = present
         attrs.onClick = onClick

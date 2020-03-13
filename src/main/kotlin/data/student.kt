@@ -6,7 +6,7 @@ data class Student (
 )
 
 val studentList =
-    arrayListOf(
+    arrayOf(
         Student("Sheldon", "Cooper"),
         Student("Leonard", "Hofstadter"),
         Student("Howard", "Wolowitz")
