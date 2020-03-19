@@ -3,7 +3,10 @@ package component
 import data.*
 import org.w3c.dom.events.Event
 import react.*
-import react.dom.h1
+import react.dom.*
+import react.router.dom.navLink
+import react.router.dom.route
+import react.router.dom.switch
 
 interface AppProps : RProps {
     var lessons: Array<Lesson>
@@ -22,24 +25,41 @@ class App : RComponent<AppProps, AppState>() {
     }
 
     override fun RBuilder.render() {
-        h1 { +"App" }
-        lessonListFull(
-            props.lessons,
-            props.students,
-            state.presents,
-            onClickLessonFull
-        )
-        studentListFull(
-            props.lessons,
-            props.students,
-            transform(state.presents),
-            onClickStudentFull
-        )
+        header {
+            h1 { +"App" }
+            nav {
+                ul {
+                    li { navLink("/lessons") { +"Lessons" } }
+                    li { navLink("/students") { +"Students" } }
+                }
+            }
+        }
+
+        switch {
+            route("/lessons",
+                render = {
+                    lessonListFull(
+                        props.lessons,
+                        props.students,
+                        state.presents,
+                        onClickLessonFull
+                    )
+                })
+            route("/students",
+                render = {
+                    studentListFull(
+                        props.lessons,
+                        props.students,
+                        transform(state.presents),
+                        onClickStudentFull
+                    )
+                })
+        }
     }
 
     fun transform(source: Array<Array<Boolean>>) =
-        Array(source[0].size){row->
-            Array(source.size){col ->
+        Array(source[0].size) { row ->
+            Array(source.size) { col ->
                 source[col][row]
             }
         }
