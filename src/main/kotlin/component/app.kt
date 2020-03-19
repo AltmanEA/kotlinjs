@@ -4,9 +4,7 @@ import data.*
 import org.w3c.dom.events.Event
 import react.*
 import react.dom.*
-import react.router.dom.navLink
-import react.router.dom.route
-import react.router.dom.switch
+import react.router.dom.*
 
 interface AppProps : RProps {
     var lessons: Array<Lesson>
@@ -15,6 +13,10 @@ interface AppProps : RProps {
 
 interface AppState : RState {
     var presents: Array<Array<Boolean>>
+}
+
+interface RouteNumberResult : RProps {
+    var number: String
 }
 
 class App : RComponent<AppProps, AppState>() {
@@ -37,32 +39,49 @@ class App : RComponent<AppProps, AppState>() {
 
         switch {
             route("/lessons",
+                exact = true,
                 render = {
-                    lessonListFull(
-                        props.lessons,
-                        props.students,
-                        state.presents,
-                        onClickLessonFull
-                    )
-                })
+                    lessonList(props.lessons)
+                }
+            )
             route("/students",
+                exact = true,
                 render = {
-                    studentListFull(
-                        props.lessons,
-                        props.students,
-                        transform(state.presents),
-                        onClickStudentFull
-                    )
-                })
+                    studentList(props.students)
+                }
+            )
+            route("/lessons/:number",
+                render = { route_props: RouteResultProps<RouteNumberResult> ->
+                    val num = route_props.match.params.number.toIntOrNull() ?: -1
+                    val lesson = props.lessons.getOrNull(num)
+                    if (lesson != null)
+                        lessonFull(
+                            lesson,
+                            props.students,
+                            state.presents[num]
+                        ) { onClick(num, it) }
+                    else
+                        p { +"No such lesson" }
+                }
+            )
+            route("/students/:number",
+                render = { route_props: RouteResultProps<RouteNumberResult> ->
+                    val num = route_props.match.params.number.toIntOrNull() ?: -1
+                    val student = props.students.getOrNull(num)
+                    if (student != null)
+                        studentFull(
+                            props.lessons,
+                            student,
+                            state.presents.map {
+                                it[num]
+                            }.toTypedArray()
+                        ) { onClick(it, num) }
+                    else
+                        p { +"No such student" }
+                }
+            )
         }
     }
-
-    fun transform(source: Array<Array<Boolean>>) =
-        Array(source[0].size) { row ->
-            Array(source.size) { col ->
-                source[col][row]
-            }
-        }
 
     fun onClick(indexLesson: Int, indexStudent: Int) =
         { _: Event ->
@@ -71,21 +90,6 @@ class App : RComponent<AppProps, AppState>() {
                     !presents[indexLesson][indexStudent]
             }
         }
-
-    val onClickLessonFull =
-        { indexLesson: Int ->
-            { indexStudent: Int ->
-                onClick(indexLesson, indexStudent)
-            }
-        }
-
-    val onClickStudentFull =
-        { indexStudent: Int ->
-            { indexLesson: Int ->
-                onClick(indexLesson, indexStudent)
-            }
-        }
-
 }
 
 fun RBuilder.app(
