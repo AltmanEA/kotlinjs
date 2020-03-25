@@ -41,13 +41,13 @@ class App : RComponent<AppProps, AppState>() {
             route("/lessons",
                 exact = true,
                 render = {
-                    lessonList(props.lessons)
+                    anyList(props.lessons, "Lessons", "/lessons")
                 }
             )
             route("/students",
                 exact = true,
                 render = {
-                    studentList(props.students)
+                    anyList(props.students, "Students", "/students")
                 }
             )
             route("/lessons/:number",
@@ -55,7 +55,8 @@ class App : RComponent<AppProps, AppState>() {
                     val num = route_props.match.params.number.toIntOrNull() ?: -1
                     val lesson = props.lessons.getOrNull(num)
                     if (lesson != null)
-                        lessonFull(
+                        anyFull(
+                            RBuilder::student,
                             lesson,
                             props.students,
                             state.presents[num]
@@ -69,13 +70,12 @@ class App : RComponent<AppProps, AppState>() {
                     val num = route_props.match.params.number.toIntOrNull() ?: -1
                     val student = props.students.getOrNull(num)
                     if (student != null)
-                        studentFull(
-                            props.lessons,
+                        anyFull(
+                            RBuilder::lesson,
                             student,
-                            state.presents.map {
-                                it[num]
-                            }.toTypedArray()
-                        ) { onClick(it, num) }
+                            props.lessons,
+                            state.presents[num]
+                        ) { onClick(num, it) }
                     else
                         p { +"No such student" }
                 }

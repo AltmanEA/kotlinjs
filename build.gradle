@@ -1,13 +1,13 @@
 plugins {
-    id 'org.jetbrains.kotlin.js' version '1.3.61'
+    id 'org.jetbrains.kotlin.js' version '1.3.71'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
 
-def kotlinVersion = "1.3.60"
-def reactVersion = "16.9.0"
-def suffix = "-pre.89-kotlin-"
+def kotlinVersion = "1.3.70"
+def reactVersion = "16.13.0"
+def suffix = "-pre.94-kotlin-"
 def kotlinReactVersion = reactVersion + suffix + kotlinVersion
 def kotlinReactRouterVersion = "4.3.1" + suffix + kotlinVersion
 
@@ -29,23 +29,8 @@ dependencies {
 kotlin {
     target.browser {}
     sourceSets["main"].dependencies {
-        implementation(npm("react", "16.9.0"))
-        implementation(npm("react-dom", "16.9.0"))
+        implementation(npm("react", "16.13.0"))
+        implementation(npm("react-dom", "16.13.0"))
         implementation(npm("react-router-dom", "4.3.1"))
     }
-}
-
-browserRun {
-    boolean open = false; // open browser
-    int port = 8080
-    devServer = devServer.copy(
-            devServer.inline,
-            devServer.lazy,
-            devServer.noInfo,
-            open,
-            devServer.overlay,
-            port,
-            devServer.proxy,
-            devServer.contentBase,
-    )
 }
