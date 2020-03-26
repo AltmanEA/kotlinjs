@@ -1,5 +1,6 @@
 package component
 
+import hoc.withDisplayName
 import react.*
 import react.dom.*
 import react.functionalComponent
@@ -27,7 +28,9 @@ fun <T> RBuilder.anyList(
     anys: Array<T>,
     name: String,
     path: String
-) = child(fAnyList<T>(name, path)){
+) = child(
+    withDisplayName(name, fAnyList<T>(name, path))
+){
     attrs.objs = anys
 }
 

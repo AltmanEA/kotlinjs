@@ -1,10 +1,12 @@
 package component
 
 import data.*
+import hoc.withDisplayName
 import org.w3c.dom.events.Event
 import react.*
 import react.dom.*
 import react.router.dom.*
+import kotlin.reflect.KClass
 
 interface AppProps : RProps {
     var lessons: Array<Lesson>
@@ -96,8 +98,15 @@ class App : RComponent<AppProps, AppState>() {
 fun RBuilder.app(
     lessons: Array<Lesson>,
     students: Array<Student>
-) = child(App::class.apply { rClass.displayName="MyApp"}) {
-    attrs.lessons = lessons
-    attrs.students = students
-}
+) =
+    child(
+        withDisplayName("AppHoc", App::class)
+    ) {
+        attrs.lessons = lessons
+        attrs.students = students
+    }
+
+
+
+
 

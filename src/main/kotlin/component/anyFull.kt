@@ -1,5 +1,6 @@
 package component
 
+import hoc.withDisplayName
 import org.w3c.dom.events.Event
 import react.*
 import react.dom.*
@@ -20,9 +21,10 @@ fun <O, S> fAnyFull(
             +it.obj.toString()
         }
         ul {
+            val t = Array<Any>(3){0}
             it.subobjs.mapIndexed { index, sub ->
                 li {
-                    rComponent(sub, it.presents[index], it.onClick(index))
+                    t[index] = rComponent(sub, it.presents[index], it.onClick(index))
                 }
             }
         }
@@ -34,7 +36,9 @@ fun <O, S> RBuilder.anyFull(
     subobjs: Array<S>,
     presents: Array<Boolean>,
     onClick: (Int) -> (Event) -> Unit
-) = child(fAnyFull<O, S>(rComponent)){
+) = child(
+    withDisplayName("Full",  fAnyFull<O, S>(rComponent))
+){
     attrs.obj = obj
     attrs.subobjs = subobjs
     attrs.presents = presents
