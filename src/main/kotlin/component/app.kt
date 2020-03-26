@@ -24,6 +24,7 @@ class App : RComponent<AppProps, AppState>() {
         state.presents = Array(props.lessons.size) {
             Array(props.students.size) { false }
         }
+
     }
 
     override fun RBuilder.render() {
@@ -95,7 +96,8 @@ class App : RComponent<AppProps, AppState>() {
 fun RBuilder.app(
     lessons: Array<Lesson>,
     students: Array<Student>
-) = child(App::class) {
+) = child(App::class.apply { rClass.displayName="MyApp"}) {
     attrs.lessons = lessons
     attrs.students = students
 }
+
