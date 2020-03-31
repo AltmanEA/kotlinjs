@@ -77,8 +77,10 @@ class App : RComponent<AppProps, AppState>() {
                             RBuilder::lesson,
                             student,
                             props.lessons,
-                            state.presents[num]
-                        ) { onClick(num, it) }
+                            state.presents.map {
+                                it[num]
+                            }.toTypedArray()
+                        ) { onClick(it, num) }
                     else
                         p { +"No such student" }
                 }
