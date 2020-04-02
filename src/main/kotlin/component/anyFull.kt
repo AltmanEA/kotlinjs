@@ -21,10 +21,9 @@ fun <O, S> fAnyFull(
             +it.obj.toString()
         }
         ul {
-            val t = Array<Any>(3){0}
             it.subobjs.mapIndexed { index, sub ->
                 li {
-                    t[index] = rComponent(sub, it.presents[index], it.onClick(index))
+                    rComponent(sub, it.presents[index], it.onClick(index))
                 }
             }
         }

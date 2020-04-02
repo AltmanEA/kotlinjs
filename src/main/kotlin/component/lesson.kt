@@ -5,6 +5,7 @@ import react.dom.*
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
 import data.*
+import hoc.withDisplayName
 
 interface LessonProps : RProps {
     var lesson: Lesson
@@ -26,7 +27,9 @@ fun RBuilder.lesson(
     lesson: Lesson,
     present: Boolean,
     onClick: (Event)->Unit
-) = child(fLesson) {
+) = child(
+    withDisplayName("Lesson", fLesson)
+) {
         attrs.lesson = lesson
         attrs.present = present
         attrs.onClick = onClick

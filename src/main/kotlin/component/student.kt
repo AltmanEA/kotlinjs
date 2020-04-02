@@ -28,7 +28,7 @@ fun RBuilder.student(
     present: Boolean,
     onClick: (Event)->Unit
 ) = child(
-    withDisplayName(student.firstname, fStudent)
+    withDisplayName("Student", fStudent)
 ) {
         attrs.student = student
         attrs.present = present
