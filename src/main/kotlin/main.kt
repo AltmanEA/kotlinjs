@@ -3,12 +3,18 @@ import data.*
 import react.dom.render
 import react.router.dom.hashRouter
 import redux.*
+import wrapper.reduxLogger
 import kotlin.browser.document
 
 val store = createStore(
     ::changeReducer,
     State(Array(lessonsList.size) { Array(studentList.size) { false } }),
-    rEnhancer()
+    compose(
+        rEnhancer(),
+        applyMiddleware(
+            reduxLogger.logger as Middleware<State, Action, Action, Action, Action>
+        )
+    )
 )
 
 val rootDiv =
