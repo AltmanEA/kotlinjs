@@ -9,10 +9,15 @@ import react.router.dom.*
 import redux.*
 
 interface AppProps : RProps {
-    var lessons: Array<Lesson>
-    var students: Array<Student>
     var store: Store<State, RAction, WrapperAction>
 }
+
+val AppProps.lessons
+    get() = this.store.state.lessons.values.toTypedArray()
+val AppProps.students
+    get() = this.store.state.students.values.toTypedArray()
+val AppProps.presents
+    get() = this.store.state.presents
 
 interface RouteNumberResult : RProps {
     var number: String
@@ -20,6 +25,7 @@ interface RouteNumberResult : RProps {
 
 fun fApp() =
     functionalComponent<AppProps> { props ->
+
         header {
             h1 { +"App" }
             nav {
@@ -43,10 +49,12 @@ fun fApp() =
                     anyList(props.students, "Students", "/students")
                 }
             )
-            route("/lessons/:number",
+            route(
+                "/lessons/:number",
                 render = renderLesson(props)
             )
-            route("/students/:number",
+            route(
+                "/students/:number",
                 render = renderStudent(props)
             )
         }
@@ -75,7 +83,7 @@ fun RBuilder.renderLesson(props: AppProps) =
                 RBuilder::student,
                 lesson,
                 props.students,
-                props.store.getState().presents[num],
+                props.presents[num],
                 props.onClickLesson(num)
             )
         else
@@ -84,14 +92,15 @@ fun RBuilder.renderLesson(props: AppProps) =
 
 fun RBuilder.renderStudent(props: AppProps) =
     { route_props: RouteResultProps<RouteNumberResult> ->
+        val state = props.store.state
         val num = route_props.match.params.number.toIntOrNull() ?: -1
-        val student = props.students.getOrNull(num)
+        val student = state.students[num]
         if (student != null)
             anyFull(
                 RBuilder::lesson,
                 student,
                 props.lessons,
-                props.store.getState().presents.map {
+                props.presents.map {
                     it[num]
                 }.toTypedArray(),
                 props.onClickStudent(num)
@@ -102,19 +111,10 @@ fun RBuilder.renderStudent(props: AppProps) =
 
 
 fun RBuilder.app(
-    lessons: Array<Lesson>,
-    students: Array<Student>,
     store: Store<State, RAction, WrapperAction>
 ) =
     child(
         withDisplayName("App", fApp())
     ) {
-        attrs.lessons = lessons
-        attrs.students = students
         attrs.store = store
     }
-
-
-
-
-

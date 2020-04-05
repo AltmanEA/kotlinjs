@@ -8,7 +8,7 @@ data class Student (
         "$firstname $surname"
 }
 
-val studentList =
+fun studentList() =
     arrayOf(
         Student("Sheldon", "Cooper"),
         Student("Leonard", "Hofstadter"),

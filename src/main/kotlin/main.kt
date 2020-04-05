@@ -7,8 +7,8 @@ import wrapper.reduxLogger
 import kotlin.browser.document
 
 val store = createStore(
-    ::changeReducer,
-    State(Array(lessonsList.size) { Array(studentList.size) { false } }),
+    ::rootReducer,
+    initialState(),
     compose(
         rEnhancer(),
         applyMiddleware(
@@ -22,7 +22,7 @@ val rootDiv =
 
 fun render() = render(rootDiv) {
     hashRouter {
-        app(lessonsList, studentList, store)
+        app(store)
     }
 }
 
