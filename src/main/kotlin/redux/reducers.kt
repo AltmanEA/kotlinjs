@@ -2,67 +2,79 @@ package redux
 
 import data.*
 
-fun presents(state: Presents, action: RAction) =
+fun presentsReducer(state: Presents, action: RAction, id: Int = -1)=
     when (action) {
         is ChangePresent ->
-            state.mapIndexed { indexLesson, lesson ->
-                if (indexLesson == action.lessonID)
-                    lesson.mapIndexed { indexStudent, student ->
-                        if (indexStudent == action.studentID)
-                            !student
-                        else student
-                    }.toTypedArray()
-                else
-                    lesson
-            }.toTypedArray()
+            state.toMutableMap().apply {
+                this[action.lessonID]?.let {
+                    val old = it[action.studentID]?:false
+                    (it as MutableMap)[action.studentID] = !old
+                }
+            }
         is AddLesson ->
-            state + arrayOf(Array(state.size) { false })
-        is AddStudent -> {
-            val trans = transform(state)
-            transform(trans + arrayOf(Array(trans.size) { false }))
-        }
-        is RemoveLesson ->
-            state
-                .filterIndexed { index, _ -> index != action.id }
-                .toTypedArray()
+            state.plus(id to state.values.first().keys.associateWith { false } )
+        is AddStudent ->
+            HashMap<Int, Map<Int, Boolean>>().toMutableMap().apply {
+                state.map {
+                    put(it.key, it.value.plus(id to false))
+                }
+            }
+        is RemoveLesson -> state.minus(action.id)
         is RemoveStudent ->
-            transform(
-                transform(state)
-                    .filterIndexed { index, _ -> index != action.id }
-                    .toTypedArray()
-            )
+            HashMap<Int, Map<Int, Boolean>>().toMutableMap().apply {
+                state.map {
+                    put(it.key, it.value.minus(action.id))
+                }
+            }
         else -> state
     }
 
-fun lesson(state: LessonState, action: RAction) =
+fun lessonsReducer(state: LessonState, action: RAction, newId: Int = -1) =
     when (action) {
-        is AddLesson -> state + (state.newId() to action.lesson)
+        is AddLesson -> state + (newId to action.lesson)
         is RemoveLesson -> state.minus(action.id)
         is ChangeLesson ->
             state.toMutableMap()
                 .apply {
-                    remove(action.id)
-                    put(action.id, action.newLesson)
+                    this[action.id] = action.newLesson
                 }
         else -> state
     }
 
-fun student(state: StudentState, action: RAction) =
+fun studentsReducer(state: StudentState, action: RAction, newId: Int = -1) =
     when (action) {
-        is AddStudent -> state + (state.newId() to action.student)
+        is AddStudent -> state + (newId to action.student)
         is RemoveStudent -> state.minus(action.id)
         is ChangeStudent ->
             state.toMutableMap()
                 .apply {
-                    remove(action.id)
-                    put(action.id, action.newStudent)
+                    this[action.id] = action.newStudent
                 }
         else -> state
     }
 
 fun rootReducer(state: State, action: RAction) =
-    State(
-        lesson(state.lessons, action),
-        student(state.students, action),
-        presents(state.presents, action)
-    )
+    when (action) {
+        is AddLesson -> {
+            val id = state.lessons.newId()
+            State(
+                lessonsReducer(state.lessons, action, id),
+                studentsReducer(state.students, action),
+                presentsReducer(state.presents, action, id)
+            )
+        }
+        is AddStudent -> {
+            val id = state.students.newId()
+            State(
+                lessonsReducer(state.lessons, action),
+                studentsReducer(state.students, action, id),
+                presentsReducer(state.presents, action, id)
+            )
+        }
+        else ->
+            State(
+                lessonsReducer(state.lessons, action),
+                studentsReducer(state.students, action),
+                presentsReducer(state.presents, action)
+            )
+    }

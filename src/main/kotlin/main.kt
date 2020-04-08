@@ -6,14 +6,15 @@ import redux.*
 import wrapper.reduxLogger
 import kotlin.browser.document
 
-val store = createStore(
+val store: Store<State, RAction, WrapperAction> = createStore(
     ::rootReducer,
     initialState(),
     compose(
         rEnhancer(),
-        applyMiddleware(
-            reduxLogger.logger as Middleware<State, Action, Action, Action, Action>
-        )
+//        applyMiddleware(
+//            reduxLogger.logger as Middleware<State, Action, Action, Action, Action>
+//        ),
+        js("if(window.__REDUX_DEVTOOLS_EXTENSION__ )window.__REDUX_DEVTOOLS_EXTENSION__ ();else(function(f){return f;});")
     )
 )
 
