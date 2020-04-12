@@ -1,6 +1,6 @@
 package data
 
-data class Student (
+data class Student(
     val firstname: String,
     val surname: String
 ) {

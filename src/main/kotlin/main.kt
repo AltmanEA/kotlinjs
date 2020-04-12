@@ -2,7 +2,6 @@ import container.*
 import data.*
 import react.dom.render
 import react.redux.provider
-import react.router.dom.browserRouter
 import react.router.dom.hashRouter
 import redux.*
 import kotlin.browser.document
@@ -12,19 +11,13 @@ val store: Store<State, RAction, WrapperAction> = createStore(
     initialState(),
     compose(
         rEnhancer(),
-//        applyMiddleware(
-//            reduxLogger.logger as Middleware<State, Action, Action, Action, Action>
-//        ),
         js("if(window.__REDUX_DEVTOOLS_EXTENSION__ )window.__REDUX_DEVTOOLS_EXTENSION__ ();else(function(f){return f;});")
     )
 )
 
-val rootDiv =
-    document.getElementById("root")
-
 fun main() {
-    render(rootDiv){
-        provider(store){
+    render(document.getElementById("root")) {
+        provider(store) {
             hashRouter {
                 appContainer {}
             }

@@ -21,9 +21,9 @@ fun <O, S> fAnyFull(
             +props.obj.second.toString()
         }
         ul {
-            props.subobjs.map{
-                val present = props.presents?.get(it.key)?:false
-                val cssClass = if(present) "present" else "absent"
+            props.subobjs.map {
+                val present = props.presents?.get(it.key) ?: false
+                val cssClass = if (present) "present" else "absent"
                 li {
                     rComponent(it.value, cssClass, props.onClick(it.key))
                 }
@@ -38,8 +38,8 @@ fun <O, S> RBuilder.anyFull(
     presents: Map<Int, Boolean>?,
     onClick: (Int) -> (Event) -> Unit
 ) = child(
-    withDisplayName("Full",  fAnyFull<O, S>(rComponent))
-){
+    withDisplayName("Full", fAnyFull<O, S>(rComponent))
+) {
     attrs.obj = obj
     attrs.subobjs = subobjs
     attrs.presents = presents

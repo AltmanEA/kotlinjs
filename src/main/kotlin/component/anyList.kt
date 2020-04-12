@@ -6,7 +6,6 @@ import react.*
 import react.dom.*
 import react.router.dom.navLink
 
-
 interface AnyListProps<O> : RProps {
     var objs: Map<Int, O>
     var add: (Event) -> Unit

@@ -17,7 +17,7 @@ fun <T> Map<Int, T>.newId() =
 
 fun State.presentsStudent(idStudent: Int) =
     presents.map {
-        it.key to (it.value[idStudent]?:false)
+        it.key to (it.value[idStudent] ?: false)
     }.toMap()
 
 
@@ -29,7 +29,7 @@ fun initialState() =
         studentList().mapIndexed { index, student ->
             index to student
         }.toMap(),
-        lessonsList().mapIndexed {idLesson, _ ->
+        lessonsList().mapIndexed { idLesson, _ ->
             idLesson to studentList().mapIndexed { idStudent, _ ->
                 idStudent to false
             }.toMap()

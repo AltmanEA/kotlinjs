@@ -15,9 +15,6 @@ interface RouteNumberResult : RProps {
     var number: String
 }
 
-fun RouteResultProps<RouteNumberResult>.num() =
-    this.match.params.number.toIntOrNull() ?: -1
-
 fun fApp() =
     functionalComponent<AppProps> { props ->
         header {
@@ -69,7 +66,7 @@ fun fApp() =
                     { props.lessons[it] },
                     { index, lesson ->
                         lessonEditContainer {
-                            attrs.obj = index to lesson
+                            attrs.lesson = index to lesson
                         }
                     }
                 )
@@ -80,7 +77,7 @@ fun fApp() =
                     { props.students[it] },
                     { index, student ->
                         studentEditContainer {
-                            attrs.obj = index to student
+                            attrs.student = index to student
                         }
                     }
                 )
@@ -93,7 +90,7 @@ fun <O> RBuilder.renderObject(
     rElement: (Int, O) -> ReactElement
 ) =
     { route_props: RouteResultProps<RouteNumberResult> ->
-        val num = route_props.num()
+        val num = route_props.match.params.number.toIntOrNull() ?: -1
         val obj = selector(num)
         if (obj != null)
             rElement(num, obj)

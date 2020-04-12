@@ -35,13 +35,14 @@ val lessonFullContainer =
             presents = state.presents[ownProps.obj.first]
         },
         { dispatch, ownProps ->
-            onClick = { index ->
-                {
-                    dispatch(ChangePresent(ownProps.obj.first, index))
+            onClick =
+                { index ->
+                    {
+                        dispatch(ChangePresent(ownProps.obj.first, index))
+                    }
                 }
-            }
         }
-    ) (
+    )(
         withDisplayName(
             "LessonFull",
             fAnyFull<Lesson, Student>(RBuilder::student)
@@ -69,7 +70,7 @@ val studentFullContainer =
                 }
             }
         }
-    ) (
+    )(
         withDisplayName(
             "StudentFull",
             fAnyFull<Student, Lesson>(RBuilder::lesson)

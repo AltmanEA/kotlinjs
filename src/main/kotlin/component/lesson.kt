@@ -14,14 +14,14 @@ import kotlin.browser.window
 interface LessonProps : RProps {
     var lesson: Lesson
     var cssClass: String
-    var onClick: (Event)->Unit
+    var onClick: (Event) -> Unit
 }
 
 val fLesson =
     functionalComponent<LessonProps> {
-        span (
+        span(
             it.cssClass
-        ){
+        ) {
             +it.lesson.name
             attrs.onClickFunction = it.onClick
         }
@@ -30,22 +30,22 @@ val fLesson =
 fun RBuilder.lesson(
     lesson: Lesson,
     cssClass: String,
-    onClick: (Event)->Unit
+    onClick: (Event) -> Unit
 ) = child(
     withDisplayName("Lesson", fLesson)
 ) {
-        attrs.lesson = lesson
-        attrs.cssClass = cssClass
-        attrs.onClick = onClick
-    }
+    attrs.lesson = lesson
+    attrs.cssClass = cssClass
+    attrs.onClick = onClick
+}
 
 interface LessonEditProps : RProps {
     var lesson: Pair<Int, Lesson>
-    var onClick: (Lesson)->Unit
+    var onClick: (Lesson) -> Unit
 }
 
 val fLessonEdit =
-    functionalComponent<LessonEditProps> {props ->
+    functionalComponent<LessonEditProps> { props ->
         span {
             input() {
                 attrs.id = "lessonEdit${props.lesson.first}"
@@ -63,13 +63,3 @@ val fLessonEdit =
             }
         }
     }
-
-fun RBuilder.lessonEdit(
-    lesson: Pair<Int, Lesson>,
-    onClick: (Lesson)->Unit
-) = child(
-    withDisplayName("LessonEdit", fLessonEdit)
-) {
-    attrs.lesson = lesson
-    attrs.onClick = onClick
-}

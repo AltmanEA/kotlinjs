@@ -2,17 +2,17 @@ package redux
 
 import data.*
 
-fun presentsReducer(state: Presents, action: RAction, id: Int = -1)=
+fun presentsReducer(state: Presents, action: RAction, id: Int = -1) =
     when (action) {
         is ChangePresent ->
             state.toMutableMap().apply {
                 this[action.lessonID]?.let {
-                    val old = it[action.studentID]?:false
+                    val old = it[action.studentID] ?: false
                     (it as MutableMap)[action.studentID] = !old
                 }
             }
         is AddLesson ->
-            state.plus(id to state.values.first().keys.associateWith { false } )
+            state.plus(id to state.values.first().keys.associateWith { false })
         is AddStudent ->
             HashMap<Int, Map<Int, Boolean>>().toMutableMap().apply {
                 state.map {

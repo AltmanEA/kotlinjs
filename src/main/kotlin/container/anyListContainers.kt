@@ -22,14 +22,15 @@ val studentListHOC =
             State,
             RAction,
             WrapperAction,
-            RProps,
+            RProps,                         // Own Props
             AnyListStateProps<Student>,
             AnyListDispatchProps,
-            AnyListProps<Student>>(
-        { state, _ ->
+            AnyListProps<Student>
+            >(
+        mapStateToProps = { state, _ ->
             objs = state.students
         },
-        { dispatch, _ ->
+        mapDispatchToProps = { dispatch, _ ->
             add = { dispatch(AddStudent(Student("new", "student"))) }
             remove = { dispatch(RemoveStudent(it)) }
         }
@@ -53,7 +54,8 @@ val lessonListContainer =
             RProps,
             AnyListStateProps<Lesson>,
             AnyListDispatchProps,
-            AnyListProps<Lesson>>(
+            AnyListProps<Lesson>
+            >(
         { state, _ ->
             objs = state.lessons
         },

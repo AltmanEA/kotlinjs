@@ -39,7 +39,6 @@ fun RBuilder.student(
     attrs.onClick = onClick
 }
 
-
 interface StudentEditProps : RProps {
     var student: Pair<Int, Student>
     var onClick: (Student) -> Unit
@@ -71,13 +70,3 @@ val fStudentEdit =
             }
         }
     }
-
-fun RBuilder.studentEdit(
-    student: Pair<Int, Student>,
-    onClick: (Student) -> Unit
-) = child(
-    withDisplayName("LessonEdit", fStudentEdit)
-) {
-    attrs.student = student
-    attrs.onClick = onClick
-}

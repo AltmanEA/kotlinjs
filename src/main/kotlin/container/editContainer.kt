@@ -7,46 +7,46 @@ import component.*
 import data.*
 import hoc.withDisplayName
 
-interface EditOwnProps<O> : RProps {
-    var obj: Pair<Int, O>
+interface LessonEditOwnProps : RProps {
+    var lesson: Pair<Int, Lesson>
 }
 
-val lessonEditContainerHOC =
+val lessonEditContainer =
     rConnect<
             RAction,
             WrapperAction,
-            EditOwnProps<Lesson>,
-            LessonEditProps>(
+            LessonEditOwnProps,
+            LessonEditProps
+            >(
         { dispatch, ownProps ->
             onClick = {
-                dispatch(ChangeLesson(ownProps.obj.first, it))
+                dispatch(ChangeLesson(ownProps.lesson.first, it))
             }
         }
+    )(
+        withDisplayName(
+            "LessonEdit",
+            fLessonEdit
+        ).unsafeCast<RClass<LessonEditProps>>()
     )
 
-val lessonEditRClass =
-    withDisplayName(
-        "LessonEdit",
-        fLessonEdit
-    ).unsafeCast<RClass<LessonEditProps>>()
-
-
-val lessonEditContainer =
-    lessonEditContainerHOC(lessonEditRClass)
-
+interface StudentEditOwnProps : RProps {
+    var student: Pair<Int, Student>
+}
 
 val studentEditContainer =
     rConnect<
             RAction,
             WrapperAction,
-            EditOwnProps<Student>,
-            StudentEditProps>(
+            StudentEditOwnProps,
+            StudentEditProps
+            >(
         { dispatch, ownProps ->
             onClick = {
-                dispatch(ChangeStudent(ownProps.obj.first, it))
+                dispatch(ChangeStudent(ownProps.student.first, it))
             }
         }
-    ) (
+    )(
         withDisplayName(
             "StudentEdit",
             fStudentEdit
