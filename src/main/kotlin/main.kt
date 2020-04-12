@@ -1,9 +1,10 @@
-import component.app
+import container.*
 import data.*
 import react.dom.render
+import react.redux.provider
+import react.router.dom.browserRouter
 import react.router.dom.hashRouter
 import redux.*
-import wrapper.reduxLogger
 import kotlin.browser.document
 
 val store: Store<State, RAction, WrapperAction> = createStore(
@@ -21,16 +22,13 @@ val store: Store<State, RAction, WrapperAction> = createStore(
 val rootDiv =
     document.getElementById("root")
 
-fun render() = render(rootDiv) {
-    hashRouter {
-        app(store)
-    }
-}
-
 fun main() {
-    render()
-    store.subscribe {
-        render()
+    render(rootDiv){
+        provider(store){
+            hashRouter {
+                appContainer {}
+            }
+        }
     }
 }
 

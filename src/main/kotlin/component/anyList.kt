@@ -1,6 +1,5 @@
 package component
 
-import hoc.withDisplayName
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
 import react.*
@@ -50,19 +49,4 @@ fun <O> fAnyList(
             }
         }
     }
-
-fun <O> RBuilder.anyList(
-    objs: Map<Int, O>,
-    name: String,
-    path: String,
-    rObj: RBuilder.(O, String, (Event) -> Unit) -> ReactElement,
-    add: (Event) -> Unit,
-    remove: (Int) -> Unit
-) = child(
-    withDisplayName(name, fAnyList<O>(name, path, rObj))
-) {
-    attrs.objs = objs
-    attrs.add = add
-    attrs.remove = remove
-}
 

@@ -7,13 +7,9 @@ import react.dom.*
 import react.router.dom.*
 
 interface AppProps : RProps {
-    var store: Store<State, RAction, WrapperAction>
+    var lessons: Map<Int, Lesson>
+    var students: Map<Int, Student>
 }
-
-val AppProps.lessons
-    get() = this.store.state.lessons
-val AppProps.students
-    get() = this.store.state.students
 
 interface RouteNumberResult : RProps {
     var number: String
@@ -24,7 +20,6 @@ fun RouteResultProps<RouteNumberResult>.num() =
 
 fun fApp() =
     functionalComponent<AppProps> { props ->
-
         header {
             h1 { +"App" }
             nav {
